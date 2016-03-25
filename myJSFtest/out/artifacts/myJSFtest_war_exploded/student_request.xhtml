@@ -33,24 +33,24 @@
         </f:facet>
         <h:column>
             <f:facet name="header">
-                <h:outputText value="Student Firts Name" />
+                Student First Name
             </f:facet>
               <h:inputText value="#{item.firstName}"  size="10" rendered="#{item.editable}"/>
               <h:outputText value="#{item.firstName}" rendered="#{not item.editable}" />
         </h:column>
         <h:column>
             <f:facet name="header">
-                <h:outputText value="Student Last Name" />
+                Student Last Name
             </f:facet>
             <h:inputText value="#{item.lastName}" size="10" rendered="#{item.editable}"/>
             <h:outputText value="#{item.lastName}" rendered="#{not item.editable}" />
         </h:column>
         <h:column>
             <f:facet name="header">
-                <h:outputText value="Country Name" />
+                Country Name
             </f:facet>
             <h:inputText value="#{item.country}" size="10" rendered="#{item.editable}"/>
-            <h:outputText value="#{item.country}"  rendered="#{not item.editable}"/>
+            <h:outputText value="#{item.country}"  rendered="#{not item.editable }"/>
         </h:column>
         <h:column>
             <f:facet name="header">Delete</f:facet>
@@ -63,7 +63,9 @@
 
         </h:column>
     </h:dataTable>
-
+    <br/>
+    <h:commandButton value="Save Student"
+                     action="#{studentdata.saveStudent}" />
 
 </h:form>
 

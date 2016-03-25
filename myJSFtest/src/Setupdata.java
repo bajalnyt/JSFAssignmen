@@ -1,4 +1,5 @@
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.sql.*;
@@ -11,10 +12,11 @@ import java.util.List;
  * Created by 202824 on 3/9/2016.
  */
 @ManagedBean(name = "studentdata")
+@RequestScoped
 public class Setupdata implements Serializable{
 
     private static final long serialVersionUID = 1L;
-
+    ArrayList<StudentBean> studentList;
 
     public void insertStudent(StudentBean stnt){
         String fname =  stnt.getFirstName();
@@ -35,21 +37,20 @@ public class Setupdata implements Serializable{
         getStudentList();
         System.out.println("Delete student = " + fnamed + lnamed + cntryd);
     }
+
     public String updateStudent(StudentBean stntupd){
         stntupd.setEditable(true);
-        System.out.println("Edit set to tru");
+        System.out.println("Edit set to true " + stntupd.editable);
         return null;
     }
 
-    public String editStudent(StudentBean stntupd){
+    public String saveStudent(){
 
-        String fnameu = stntupd.getFirstName();
-        String lnameu = stntupd.getLastName();
-        String cntryu = stntupd.getCountry();
-
+       for (StudentBean s:studentList)
+                s.setEditable(false);
      //   connDataBaseDelete(fnameu,lnameu,cntryu);
      //  getStudentList();
-        System.out.println("Updated student = " + fnameu + lnameu + cntryu);
+       // System.out.println("Updated student = " + fnameu + lnameu + cntryu);
         return null;
     }
 
@@ -93,7 +94,7 @@ public class Setupdata implements Serializable{
 
 
     public ArrayList<StudentBean> loadArray(){
-        ArrayList<StudentBean> studentList = new ArrayList<>();
+        studentList = new ArrayList<>();
         ResultSet rs = null;
         PreparedStatement pst = null;
         String stm = "Select * from Students";
@@ -109,7 +110,6 @@ public class Setupdata implements Serializable{
                 student.setFirstName(rs.getString(3));
                 student.setLastName(rs.getString(2));
                 student.setCountry(rs.getString(4));
-
 
                 studentList.add(student);
             }
@@ -142,7 +142,8 @@ public class Setupdata implements Serializable{
 
     }
     public ArrayList<StudentBean> getStudentList() {
-        return loadArray();
+        studentList = loadArray();
+        return studentList;
     }
 
     public Connection getConnection(){

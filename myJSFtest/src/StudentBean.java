@@ -23,10 +23,14 @@ public class StudentBean {
     boolean editable;
 
     public boolean isEditable() {
+        System.out.println("BOOLEN iseditable " + editable + firstName );
+
         return editable;
     }
     public void setEditable(boolean editable) {
+
         this.editable = editable;
+        System.out.println("student editable " + editable );
     }
 
 

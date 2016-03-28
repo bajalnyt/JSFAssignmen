@@ -1,36 +1,26 @@
 /**
  * Created by 202824 on 3/8/2016.
  */
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import java.io.Serializable;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
-@ManagedBean(name = "student")
-/* If no name is specified in the @ManagedBean annotation, the managed bean is always
- * accessed with the first letter of the class name in lowercase.
- */
-public class StudentBean {
-    private String firstName;
-    private String lastName;
-    private String country;
-    private String message;
+public class Student {
+
+     String firstName;
+     String lastName;
+     String country;
+     String message;
 
 
     boolean editable;
 
     public boolean isEditable() {
-        System.out.println("BOOLEN iseditable " + editable + firstName );
-
+        System.out.println("iseditable " + editable + firstName );
         return editable;
     }
-    public void setEditable(boolean editable) {
 
+    public void setEditable(boolean editable) {
         this.editable = editable;
-        System.out.println("student editable " + editable );
+        System.out.println("student editable " + firstName+":"+ editable );
     }
 
 
@@ -46,7 +36,7 @@ public class StudentBean {
 
 
 
-    public StudentBean(String firstName, String lastName, String country) {
+    public Student(String firstName, String lastName, String country) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.country = country;
@@ -60,7 +50,7 @@ public class StudentBean {
         this.country = country;
     }
 
-    public StudentBean(){}
+    public Student(){}
 
     public String getFirstName() {
         return firstName;

@@ -1,24 +1,15 @@
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
-//import static java.sql.DriverManager.getConnection;
 
-/**
- * Created by 202824 on 3/9/2016.
- */
-@ManagedBean(name = "studentdata")
-@RequestScoped
-public class Setupdata implements Serializable{
+public class StudentDataHelper implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    ArrayList<StudentBean> studentList;
+    ArrayList<Student> studentList;
 
-    public void insertStudent(StudentBean stnt){
+    public void insertStudent(Student stnt){
         String fname =  stnt.getFirstName();
         String lname = stnt.getLastName();
         String cntry = stnt.getCountry();
@@ -28,7 +19,7 @@ public class Setupdata implements Serializable{
     }
 
 
-    public void deleteStudent(StudentBean stntdel){
+    public void deleteStudent(Student stntdel){
         String fnamed = stntdel.getFirstName();
         String lnamed = stntdel.getLastName();
         String cntryd = stntdel.getCountry();
@@ -38,20 +29,19 @@ public class Setupdata implements Serializable{
         System.out.println("Delete student = " + fnamed + lnamed + cntryd);
     }
 
-    public String updateStudent(StudentBean stntupd){
+    public String updateStudent(Student stntupd){
         stntupd.setEditable(true);
-        System.out.println("Edit set to true " + stntupd.editable);
+        System.out.println("Setting "+ stntupd.firstName +" editable to " + stntupd.editable);
         return null;
     }
 
     public String saveStudent(){
 
-       for (StudentBean s:studentList)
-                s.setEditable(false);
-     //   connDataBaseDelete(fnameu,lnameu,cntryu);
-     //  getStudentList();
-       // System.out.println("Updated student = " + fnameu + lnameu + cntryu);
-        return null;
+       for (Student s:studentList) {
+           s.setEditable(false);
+       }
+
+       return null;
     }
 
 
@@ -59,8 +49,10 @@ public class Setupdata implements Serializable{
      public void connDataBaseInsert(String firstName, String lastName, String country) {
 
          PreparedStatement pst1 = null;
-         String stm1 = "INSERT INTO STUDENTS (studentid, firstname,lastname,country) VALUES" +
-                 "(6,'" +  firstName + "','" + lastName + "','"  + country + "')";
+         if(firstName==null || firstName.equalsIgnoreCase("null"))
+             return;
+         String stm1 = "INSERT INTO STUDENTS (firstname,lastname,country) VALUES" +
+                 "('"+ firstName + "','" + lastName + "','"  + country + "')";
          System.out.println(stm1);
          try (Connection con = getConnection()) {
 
@@ -93,55 +85,33 @@ public class Setupdata implements Serializable{
     }
 
 
-    public ArrayList<StudentBean> loadArray(){
+    public ArrayList<Student> loadArray(){
         studentList = new ArrayList<>();
         ResultSet rs = null;
         PreparedStatement pst = null;
         String stm = "Select * from Students";
-        try (Connection con = getConnection()){
 
+        try (Connection con = getConnection()){
             pst = con.prepareStatement(stm);
             pst.execute();
             rs = pst.getResultSet();
 
             while(rs.next()){
-                StudentBean student = new StudentBean();
+                Student student = new Student();
 
-                student.setFirstName(rs.getString(3));
-                student.setLastName(rs.getString(2));
-                student.setCountry(rs.getString(4));
+                student.setFirstName(rs.getString("firstname"));
+                student.setLastName(rs.getString("lastname"));
+                student.setCountry(rs.getString("country"));
 
                 studentList.add(student);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-      //  System.out.println(studentList.size());
         return studentList;
 
-     /*   StudentBean s1 = new StudentBean();
-
-        s1.setFirstName("John");
-        s1.setLastName("Smith");
-        s1.setCountry("USA");
-
-        StudentBean s2 = new StudentBean();
-
-        s2.setFirstName("Barry");
-        s2.setLastName("Ivanov");
-        s2.setCountry("Russia");
-
-
-        studentList.add(s1);
-        studentList.add(s2);
-
-        StudentBean s3 = new StudentBean("Peter","Ray","Israel");
-        studentList.add(s3); */
-
-
-
     }
-    public ArrayList<StudentBean> getStudentList() {
+    public ArrayList<Student> getStudentList() {
         studentList = loadArray();
         return studentList;
     }
